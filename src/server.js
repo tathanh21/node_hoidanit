@@ -2,6 +2,8 @@ const express = require('express')
 // import { Express } from 'express';
 import configViewEngine from './configs/viewEngine';
 import initWebRoute from './route/web';
+// import connection from './configs/connectDb';
+
 const path = require('path');
 require('dotenv').config()
 
