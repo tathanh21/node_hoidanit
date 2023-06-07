@@ -77,3 +77,17 @@ body {
     margin-top: 15px;
     cursor: pointer;
 }
+
+.update-user-contaniner {
+    padding: 15px;
+    text-align: center;
+}
+
+.update-user-contaniner label {
+    display: block;
+}
+
+.update-user-contaniner .btn-save {
+    margin-top: 15px;
+    cursor: pointer;
+}
