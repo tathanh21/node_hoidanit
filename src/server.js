@@ -2,6 +2,7 @@ const express = require('express')
 // import { Express } from 'express';
 import configViewEngine from './configs/viewEngine';
 import initWebRoute from './route/web';
+import initApiRoute from './route/api';
 // import connection from './configs/connectDb';
 
 const path = require('path');
@@ -19,6 +20,9 @@ configViewEngine(app);
 
 //init web route
 initWebRoute(app)
+
+//init the api
+initApiRoute(app)
 
 
 app.listen(port, () => {
