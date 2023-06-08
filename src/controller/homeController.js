@@ -1,4 +1,6 @@
 import pool from "../configs/connectDb";
+const multer = require('multer');
+const path = require('path');
 let getHomepage = async (req, res) => {
     //logic.
 
@@ -40,6 +42,68 @@ let updateUser = async (req, res) => {
         , [firstName, lastName, email, address, id]);
     return res.redirect('/');
 }
+
+
+let getUploadFilePage = async (req, res) => {
+    return res.render('uploadFile.ejs')
+}
+const upload = multer().single('profile_pic');
+const uploadMultiple = multer().array('multiple_images');
+
+let handleUploadFile = async (req, res) => {
+    // 'profile_pic' is the name of our file input field in the HTML form
+    // let upload = multer({ storage: storage, fileFilter: helpers.imageFilter }).single('profile_pic');
+
+    upload(req, res, function (err) {
+        // req.file contains information of uploaded file
+        // req.body contains information of text fields, if there were any
+
+        if (req.fileValidationError) {
+            console.log('1');
+            return res.send(req.fileValidationError);
+        }
+        else if (!req.file) {
+            console.log('2');
+            return res.send('Please select an image to upload');
+        }
+        else if (err instanceof multer.MulterError) {
+            console.log('3');
+            return res.send(err);
+        }
+        else if (err) {
+            console.log('4');
+            return res.send(err);
+        }
+        // Display uploaded image for user validation
+        res.send(`You have uploaded this image: <hr/><img src="/image/${req.file.filename}" width="500"><hr /><a href="/upload">Upload another image</a>`);
+    });
+}
+let handleUploadMultipleFile = async (req, res) => {
+    // uploadMultiple(req, res, function (err) {
+    //     if (req.fileValidationError) {
+    //         return res.send(req.fileValidationError);
+    //     }
+    if (req.fileValidationError) {
+        console.log('1');
+        return res.send(req.fileValidationError);
+    }
+    else if (!req.files) {
+        console.log('2');
+        return res.send('Please select an image to upload');
+    }
+
+    let result = "You have uploaded these images: <hr />";
+    const files = req.files;
+    let index, len;
+
+    // Loop through all the uploaded images and display them on frontend
+    for (index = 0, len = files.length; index < len; ++index) {
+        result += `<img src="/image/${files[index].filename}" width="300" style="margin-right: 20px;">`;
+    }
+    result += '<hr/><a href="/upload">Upload more images</a>';
+    res.send(result);
+    // });
+}
 module.exports = {
-    getHomepage, getDetailpage, createNewUser, deleteUser, getEditPage, updateUser
+    getHomepage, getDetailpage, createNewUser, deleteUser, getEditPage, updateUser, getUploadFilePage, handleUploadFile, handleUploadMultipleFile
 }
